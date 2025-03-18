@@ -1,13 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import MainPage from "./components/MainPage";
+import Dashboard from "./components/Dashboard";
+import Login from "./components/Login";
 import "./tailwind.css"
 
 function App() {
   return (
     <Routes>
       <Route path="/register" element={<h1>Register Here!</h1>}/>
-      <Route path="/login" element={<h1>Login Here!</h1>}/>
-      <Route path="/home" element={<MainPage/>}/>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/dashboard" element={<Dashboard/>}/>
     </Routes>
   );
 }
