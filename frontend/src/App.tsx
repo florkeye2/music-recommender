@@ -1,14 +1,18 @@
 import { Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
+import RegisterPage from "./components/RegisterPage";
+import LoginPage from "./components/LoginPage";
 import "./tailwind.css"
 
 function App() {
   return (
-    <Routes>
-      <Route path="/register" element={<h1>Register Here!</h1>}/>
-      <Route path="/login" element={<h1>Login Here!</h1>}/>
-      <Route path="/home" element={<MainPage/>}/>
-    </Routes>
+    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <Routes>
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/home" element={<MainPage />} />
+      </Routes>
+    </div>
   );
 }
 
