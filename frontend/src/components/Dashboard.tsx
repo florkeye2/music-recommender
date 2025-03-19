@@ -77,10 +77,14 @@ const Dashboard: React.FC = () => {
                         {playerData ? (
                             <div className="flex-col space-y-2 w-full max-w-md">
                                 <CurrentSong songData={playerData.item} />
-                                <ControlBar accessToken={accessToken} setQueuedSongs={setQueuedSongs} />
-                                <div className="flex fixed bottom-0 left-0 w-full bg-zinc-950 justify-center items-center">
-                                    <div className="relative w-[50%] space-y-4 m-2">
-                                        <Timestamp playerData={playerData} />
+                                <div className="fixed bottom-0 left-0 w-full bg-zinc-950">
+                                    <div className="flex flex-col justify-center items-center p-4 space-y-2">
+                                        {/* ControlBar goes above Timestamp */}
+                                        <ControlBar accessToken={accessToken} setQueuedSongs={setQueuedSongs} />
+                                        {/* Timestamp bar */}
+                                        <div className="relative w-full max-w-md">
+                                            <Timestamp playerData={playerData} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -93,6 +97,7 @@ const Dashboard: React.FC = () => {
                     <p>Not logged in</p>
                 )}
             </div>
+            
         </div>
     );
 };
