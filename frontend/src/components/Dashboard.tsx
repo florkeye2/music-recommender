@@ -38,31 +38,50 @@ const Dashboard: React.FC = () => {
         }
     };
 
-    const addToQueue = (song: any) => {
+    const addToQueue = async (song: any) => {
+        // First, queue the song in the list
         setQueuedSongs([...queuedSongs, song]);
+
+        // Skip to the song immediately (if there is a current song playing)
+        try {
+            const response = await fetch(
+                `https://api.spotify.com/v1/me/player/queue?uri=spotify:track:${song.id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${accessToken}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                console.error(`Error queuing song: ${song.name}`);
+            }
+        } catch (error) {
+            console.error(`Error adding song to queue: ${error}`);
+        }
     };
 
     useEffect(() => {
         fetchPlayerData();
         const interval = setInterval(fetchPlayerData, 1000); // Refresh every second
         return () => clearInterval(interval);
-    }, []);
+    }, [accessToken]);
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white space-y-4 p-4">
             {accessToken ? (
                 <>
                     <Search accessToken={accessToken} addToQueue={addToQueue} />
-                    
                     {playerData ? (
                         <div className="flex-col space-y-2 w-full max-w-md">
                             <CurrentSong songData={playerData.item} />
-                            <ControlBar accessToken={accessToken} />
+                            <ControlBar accessToken={accessToken} setQueuedSongs={setQueuedSongs} />
                         </div>
                     ) : (
                         <p>No active Spotify player.</p>
                     )}
-
                     <Queue queuedSongs={queuedSongs} />
                 </>
             ) : (
