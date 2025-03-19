@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CurrentSong from "./CurrentSong";
-import ControlBar from "./ControlBar"
+import ControlBar from "./ControlBar";
+import Search from "./Search";
+import Queue from "./Queue";
 
 const Dashboard: React.FC = () => {
     const [searchParams] = useSearchParams();
     const accessToken = searchParams.get("access_token") || localStorage.getItem("access_token");
     const refreshToken = searchParams.get("refresh_token") || localStorage.getItem("refresh_token");
     const [playerData, setPlayerData] = useState<any>(null);
+    const [queuedSongs, setQueuedSongs] = useState<any[]>([]);
 
     useEffect(() => {
         if (accessToken) {
@@ -26,13 +29,17 @@ const Dashboard: React.FC = () => {
                 },
             });
 
-            if (response.status == 200) {
+            if (response.status === 200) {
                 const data = await response.json();
-                setPlayerData(data)
+                setPlayerData(data);
             }
         } catch (error) {
             console.error(`Error getting player data:`, error);
         }
+    };
+
+    const addToQueue = (song: any) => {
+        setQueuedSongs([...queuedSongs, song]);
     };
 
     useEffect(() => {
@@ -42,19 +49,25 @@ const Dashboard: React.FC = () => {
     }, []);
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white flex-col">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white space-y-4 p-4">
             {accessToken ? (
-                <div>
+                <>
+                    <Search accessToken={accessToken} addToQueue={addToQueue} />
+                    
                     {playerData ? (
-                        <div className="flex-col space-y-2">
+                        <div className="flex-col space-y-2 w-full max-w-md">
                             <CurrentSong songData={playerData.item} />
-                            <ControlBar accessToken={accessToken}/>
+                            <ControlBar accessToken={accessToken} />
                         </div>
-                    ) : (<p>No active Spotify player.</p>)
-                    }
-                </div>
-            ) : (<p>Not logged in</p>)
-            }
+                    ) : (
+                        <p>No active Spotify player.</p>
+                    )}
+
+                    <Queue queuedSongs={queuedSongs} />
+                </>
+            ) : (
+                <p>Not logged in</p>
+            )}
         </div>
     );
 };
