@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CurrentSong from "./CurrentSong";
-import ControlBar from "./ControlBar"
+import ControlBar from "./ControlBar";
+import Timestamp from "./Timestamp";
 
 const Dashboard: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -42,13 +43,18 @@ const Dashboard: React.FC = () => {
     }, []);
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white flex-col">
+        <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
             {accessToken ? (
                 <div>
                     {playerData ? (
-                        <div className="flex-col space-y-2">
+                        <div className="flex-col">
                             <CurrentSong songData={playerData.item} />
-                            <ControlBar accessToken={accessToken}/>
+                            <div className="flex fixed bottom-0 left-0 w-full bg-zinc-950 justify-center items-center">
+                                <div className="relative w-[50%] space-y-4 m-2">
+                                    <ControlBar accessToken={accessToken} />
+                                    <Timestamp playerData={playerData} />
+                                </div>
+                            </div>
                         </div>
                     ) : (<p>No active Spotify player.</p>)
                     }
