@@ -5,8 +5,8 @@ function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
+            <div className="bg-zinc-800 p-8 rounded-lg shadow-lg w-full max-w-md">
                 <h1 className="text-3xl font-bold mb-6 text-center">Login with Spotify</h1>
                 {!localStorage.getItem("spotify_access_token") ? (
                     <button

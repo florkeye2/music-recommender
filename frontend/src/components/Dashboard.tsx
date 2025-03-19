@@ -4,6 +4,7 @@ import CurrentSong from "./CurrentSong";
 import ControlBar from "./ControlBar";
 import Search from "./Search";
 import Queue from "./Queue";
+import Timestamp from "./Timestamp";
 
 const Dashboard: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -71,6 +72,7 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white space-y-4 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
             {accessToken ? (
                 <>
                     <Search accessToken={accessToken} addToQueue={addToQueue} />
@@ -78,6 +80,14 @@ const Dashboard: React.FC = () => {
                         <div className="flex-col space-y-2 w-full max-w-md">
                             <CurrentSong songData={playerData.item} />
                             <ControlBar accessToken={accessToken} setQueuedSongs={setQueuedSongs} />
+                        <div className="flex-col">
+                            <CurrentSong songData={playerData.item} />
+                            <div className="flex fixed bottom-0 left-0 w-full bg-zinc-950 justify-center items-center">
+                                <div className="relative w-[50%] space-y-4 m-2">
+                                    <ControlBar accessToken={accessToken} />
+                                    <Timestamp playerData={playerData} />
+                                </div>
+                            </div>
                         </div>
                     ) : (
                         <p>No active Spotify player.</p>

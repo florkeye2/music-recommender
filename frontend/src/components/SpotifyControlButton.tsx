@@ -50,6 +50,7 @@ const SpotifyControlButton: React.FC<SpotifyControlButtonProps> = ({
             onClick={handleClick}
             className="transition-all duration-300 bg-gray-800 hover:bg-gray-600 text-white active:text-gray-400 p-2 rounded text-lg"
         >
+        <button onClick={handleClick} className="transition-all duration-300 bg-zinc-800 hover:bg-zinc-600 text-white active:text-zinc-400 p-2 rounded text-lg">
             {icon}
         </button>
     );
