@@ -40,10 +40,8 @@ const Dashboard: React.FC = () => {
     };
 
     const addToQueue = async (song: any) => {
-        // First, queue the song in the list
         setQueuedSongs([...queuedSongs, song]);
 
-        // Skip to the song immediately (if there is a current song playing)
         try {
             const response = await fetch(
                 `https://api.spotify.com/v1/me/player/queue?uri=spotify:track:${song.id}`,
@@ -72,31 +70,29 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white space-y-4 p-4">
-        <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
-            {accessToken ? (
-                <>
-                    <Search accessToken={accessToken} addToQueue={addToQueue} />
-                    {playerData ? (
-                        <div className="flex-col space-y-2 w-full max-w-md">
-                            <CurrentSong songData={playerData.item} />
-                            <ControlBar accessToken={accessToken} setQueuedSongs={setQueuedSongs} />
-                        <div className="flex-col">
-                            <CurrentSong songData={playerData.item} />
-                            <div className="flex fixed bottom-0 left-0 w-full bg-zinc-950 justify-center items-center">
-                                <div className="relative w-[50%] space-y-4 m-2">
-                                    <ControlBar accessToken={accessToken} />
-                                    <Timestamp playerData={playerData} />
+            <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
+                {accessToken ? (
+                    <>
+                        <Search accessToken={accessToken} addToQueue={addToQueue} />
+                        {playerData ? (
+                            <div className="flex-col space-y-2 w-full max-w-md">
+                                <CurrentSong songData={playerData.item} />
+                                <ControlBar accessToken={accessToken} setQueuedSongs={setQueuedSongs} />
+                                <div className="flex fixed bottom-0 left-0 w-full bg-zinc-950 justify-center items-center">
+                                    <div className="relative w-[50%] space-y-4 m-2">
+                                        <Timestamp playerData={playerData} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ) : (
-                        <p>No active Spotify player.</p>
-                    )}
-                    <Queue queuedSongs={queuedSongs} />
-                </>
-            ) : (
-                <p>Not logged in</p>
-            )}
+                        ) : (
+                            <p>No active Spotify player.</p>
+                        )}
+                        <Queue queuedSongs={queuedSongs} />
+                    </>
+                ) : (
+                    <p>Not logged in</p>
+                )}
+            </div>
         </div>
     );
 };
