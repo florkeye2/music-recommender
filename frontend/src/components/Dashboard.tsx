@@ -12,6 +12,7 @@ const Dashboard: React.FC = () => {
     const refreshToken = searchParams.get("refresh_token") || localStorage.getItem("refresh_token");
     const [playerData, setPlayerData] = useState<any>(null);
     const [queuedSongs, setQueuedSongs] = useState<any[]>([]);
+    const [currentSongId, setCurrentSongId] = useState<string | null>(null);
 
     useEffect(() => {
         if (accessToken) {
@@ -33,6 +34,17 @@ const Dashboard: React.FC = () => {
             if (response.status === 200) {
                 const data = await response.json();
                 setPlayerData(data);
+
+                // Track the current playing song
+                const nowPlayingId = data.item?.id;
+                if (nowPlayingId && nowPlayingId !== currentSongId) {
+                    setCurrentSongId(nowPlayingId);
+
+                    // Remove the current song from the queue
+                    setQueuedSongs((prevQueue) =>
+                        prevQueue.filter((song) => song.id !== nowPlayingId)
+                    );
+                }
             }
         } catch (error) {
             console.error(`Error getting player data:`, error);
@@ -66,7 +78,7 @@ const Dashboard: React.FC = () => {
         fetchPlayerData();
         const interval = setInterval(fetchPlayerData, 1000); // Refresh every second
         return () => clearInterval(interval);
-    }, [accessToken]);
+    }, [accessToken, currentSongId]);
 
     return (
         <div className="min-h-screen bg-zinc-900 text-white flex flex-row items-start p-4">
