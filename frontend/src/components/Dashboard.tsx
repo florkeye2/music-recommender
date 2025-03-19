@@ -69,19 +69,19 @@ const Dashboard: React.FC = () => {
     }, [accessToken]);
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white space-y-4 p-4">
-            <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
-                {accessToken ? (
-                    <>
+        <div className="min-h-screen bg-zinc-900 text-white flex flex-row items-start p-4">
+            {accessToken ? (
+                <>
+                    <div className="flex-1 mr-8">
                         <Search accessToken={accessToken} addToQueue={addToQueue} />
+                    </div>
+                    <div className="flex-grow max-w-md">
                         {playerData ? (
-                            <div className="flex-col space-y-2 w-full max-w-md">
+                            <div className="flex-col space-y-2">
                                 <CurrentSong songData={playerData.item} />
                                 <div className="fixed bottom-0 left-0 w-full bg-zinc-950">
                                     <div className="flex flex-col justify-center items-center p-4 space-y-2">
-                                        {/* ControlBar goes above Timestamp */}
                                         <ControlBar accessToken={accessToken} setQueuedSongs={setQueuedSongs} />
-                                        {/* Timestamp bar */}
                                         <div className="relative w-full max-w-md">
                                             <Timestamp playerData={playerData} />
                                         </div>
@@ -91,13 +91,14 @@ const Dashboard: React.FC = () => {
                         ) : (
                             <p>No active Spotify player.</p>
                         )}
+                    </div>
+                    <div className="flex-1 ml-8">
                         <Queue queuedSongs={queuedSongs} />
-                    </>
-                ) : (
-                    <p>Not logged in</p>
-                )}
-            </div>
-            
+                    </div>
+                </>
+            ) : (
+                <p>Not logged in</p>
+            )}
         </div>
     );
 };
