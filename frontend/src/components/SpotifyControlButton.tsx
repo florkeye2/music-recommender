@@ -5,7 +5,6 @@ interface SpotifyControlButtonProps {
     accessToken: string;
     requestMethod: string;
     endpoint: string;  // API endpoint (e.g., 'next', 'previous', 'pause', etc.)
-    setQueuedSongs: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const SpotifyControlButton: React.FC<SpotifyControlButtonProps> = ({
@@ -13,7 +12,6 @@ const SpotifyControlButton: React.FC<SpotifyControlButtonProps> = ({
     requestMethod,
     endpoint,
     icon,
-    setQueuedSongs
 }) => {
     const handleClick = async () => {
         if (!accessToken) {
@@ -35,10 +33,6 @@ const SpotifyControlButton: React.FC<SpotifyControlButtonProps> = ({
 
             if (response.status === 204) {
                 console.log(`${endpoint} successful`);
-
-                if (endpoint === "next") {
-                    setQueuedSongs((prevQueue) => prevQueue.slice(1));
-                }
             }
         } catch (error) {
             console.error(`Error performing ${endpoint}:`, error);
@@ -48,7 +42,7 @@ const SpotifyControlButton: React.FC<SpotifyControlButtonProps> = ({
     return (
         <button
             onClick={handleClick}
-            className="transition-all duration-300 bg-gray-800 hover:bg-gray-600 text-white active:text-gray-400 p-2 rounded text-lg"
+            className="transition-all duration-300 bg-zinc-800 hover:bg-zinc-600 text-white active:text-zinc-400 p-2 rounded text-lg"
         >
             {icon}
         </button>

@@ -13,17 +13,15 @@ const Timestamp: React.FC<TimestampProps> = ({ playerData }) => {
     };
 
     return (
-        <div className="w-full">
-            <div className="relative h-2 bg-zinc-600 rounded-full">
+        <div className="flex items-center w-full text-sm text-zinc-600 space-x-2">
+            <span>{formatTime(playerData.progress_ms)}</span>
+            <div className="relative flex-grow h-2 bg-zinc-600 rounded-full">
                 <div
                     className="h-2 bg-zinc-300 rounded-full"
                     style={{ width: `${progressPercent}%` }}
                 ></div>
             </div>
-            <div className="flex justify-between text-sm text-zinc-600 mt-1">
-                <span>{formatTime(playerData.progress_ms)}</span>
-                <span>{formatTime(playerData.item.duration_ms)}</span>
-            </div>
+            <span>{formatTime(playerData.item.duration_ms)}</span>
         </div>
     )
 }

@@ -77,10 +77,10 @@ def get_top_tracks_from_spotify(access_token: str):
     return track_names
 
 @router.get("/recommend")
-async def recommend_songs(access_token: str):
+async def recommend_songs(id: str, track_name: str, artist_name: str, explorationValue: int, access_token: str):
     try:
-        example_track_id = "01QoK9DA7VTeTSE3MNzp4I"
-        recommendation_ids = recommend_similar_tracks(example_track_id, 5).tolist()
+        track_data = {"id": id, "track_name" : track_name, "artist_name" : artist_name}
+        recommendation_ids = recommend_similar_tracks(track_data, 5, explorationValue).tolist()
 
         if not recommendation_ids:
             raise HTTPException(status_code=404, detail="No recommendations found.")

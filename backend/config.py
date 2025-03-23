@@ -11,3 +11,5 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 TOKEN_URL = "https://accounts.spotify.com/api/token"
 FRONTEND_URL = "http://localhost:5173"
 SPOTIFY_API_URL = "https://api.spotify.com/v1"
+LASTFM_KEY = os.getenv("LASTFM_KEY")
+LASTFM_API_URL = "http://ws.audioscrobbler.com/2.0"

@@ -34,13 +34,13 @@ const Search: React.FC<SearchProps> = ({ accessToken, addToQueue }) => {
     };
 
     return (
-        <div className="space-y-4 w-full max-w-md">
+        <div className="space-y-4">
             <input
                 type="text"
                 placeholder="Search for a song..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="p-2 border border-gray-700 rounded bg-gray-800 text-white w-full"
+                className="p-2 border border-zinc-700 rounded bg-zinc-800 text-white w-full"
             />
             <button
                 onClick={searchSongs}
@@ -54,7 +54,7 @@ const Search: React.FC<SearchProps> = ({ accessToken, addToQueue }) => {
                     <li key={track.id} className="flex justify-between items-center">
                         {track.name} by {track.artists[0].name}
                         <button
-                            onClick={() => addToQueue(track)}
+                            onClick={() => addToQueue(track.id)}
                             className="ml-4 p-1 bg-blue-500 text-white rounded"
                         >
                             Queue
