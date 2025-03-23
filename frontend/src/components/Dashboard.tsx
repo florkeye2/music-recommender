@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 import CurrentSong from "./CurrentSong";
 import ControlBar from "./ControlBar";
 import Search from "./Search";
 import Queue from "./Queue";
 import Timestamp from "./Timestamp";
+import Recommendations from "./Recommendations"; // Import Recommendations component
 
 const Dashboard: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -14,6 +16,9 @@ const Dashboard: React.FC = () => {
     const [queuedSongs, setQueuedSongs] = useState<any[]>([]);
     const [currentSongId, setCurrentSongId] = useState<string | null>(null);
 
+    const [topTracks, setTopTracks] = useState<any[]>([]); // Track top tracks
+
+    // Store access token and refresh token in localStorage
     useEffect(() => {
         if (accessToken) {
             localStorage.setItem("access_token", accessToken);
@@ -21,6 +26,18 @@ const Dashboard: React.FC = () => {
         }
     }, [accessToken, refreshToken]);
 
+    // Fetch the top tracks for the current user from Spotify API
+    const fetchTopTracks = async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:3001/top-tracks?access_token=${accessToken}`);
+            console.log("Top Tracks Response:", response.data);  // Check the structure
+            setTopTracks(response.data.top_tracks);
+        } catch (error) {
+            console.error("Error fetching top tracks:", error);
+        }
+    };
+
+    // Fetch player data to get the current playing song
     const fetchPlayerData = async () => {
         try {
             const response = await fetch(`https://api.spotify.com/v1/me/player`, {
@@ -51,6 +68,7 @@ const Dashboard: React.FC = () => {
         }
     };
 
+    // Add a song to the queue
     const addToQueue = async (song: any) => {
         setQueuedSongs([...queuedSongs, song]);
 
@@ -74,8 +92,13 @@ const Dashboard: React.FC = () => {
         }
     };
 
+    // Automatically refresh player data every second
     useEffect(() => {
-        fetchPlayerData();
+        if (accessToken) {
+            fetchTopTracks();  // Fetch top tracks when access token is available
+            fetchPlayerData();  // Fetch player data
+        }
+
         const interval = setInterval(fetchPlayerData, 1000); // Refresh every second
         return () => clearInterval(interval);
     }, [accessToken, currentSongId]);
@@ -102,6 +125,14 @@ const Dashboard: React.FC = () => {
                             </div>
                         ) : (
                             <p>No active Spotify player.</p>
+                        )}
+                    </div>
+                    <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-4">
+                        {/* Pass top tracks to Recommendations component */}
+                        {accessToken && topTracks.length > 0 ? (
+                            <Recommendations accessToken={accessToken} />
+                        ) : (
+                            <p>Please log in to get recommendations.</p>
                         )}
                     </div>
                     <div className="flex-1 ml-8">
