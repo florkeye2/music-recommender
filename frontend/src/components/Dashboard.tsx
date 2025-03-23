@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
     const fetchTopTracks = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:3001/top-tracks?access_token=${accessToken}`);
-            console.log("Top Tracks Response:", response.data);  // Check the structure
+            //console.log("Top Tracks Response:", response.data);  // Check the structure
             setTopTracks(response.data.top_tracks);
         } catch (error) {
             console.error("Error fetching top tracks:", error);

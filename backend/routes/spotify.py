@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 import requests
 import base64
 from backend.config import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, REDIRECT_URI, FRONTEND_URL, TOKEN_URL, SPOTIFY_API_URL
-from backend.recommendation import recommend_songs_using_t5
+from backend.recommendation import recommend_similar_tracks
 
 router = APIRouter()
 
@@ -77,22 +77,13 @@ def get_top_tracks_from_spotify(access_token: str):
     return track_names
 
 @router.get("/recommend")
-async def recommend_songs(request: Request, access_token: str):
+async def recommend_songs(request: Request):
     try:
-        # Step 1: Get the top tracks from Spotify
-        top_tracks = get_top_tracks_from_spotify(access_token)
-        if not top_tracks:
-            raise HTTPException(status_code=404, detail="No tracks found.")
+        example_track_id = "01QoK9DA7VTeTSE3MNzp4I"
+        recommendation_ids = recommend_similar_tracks(example_track_id, 5)
         
-        # Step 2: Get recommendations for each track using T5 model
-        recommendations = []
-        for track in top_tracks:
-            recommendations.extend(recommend_songs_using_t5(track))
-        
-        # Step 3: Return recommendations
-        return {"recommended_songs": recommendations}
+        return {"recomendation_ids": recommendation_ids}
 
     except Exception as e:
         print(f"Error occurred: {str(e)}")  # Log the error for debugging
         raise HTTPException(status_code=500, detail="Internal Server Error")
-
