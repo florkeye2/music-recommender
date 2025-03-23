@@ -60,21 +60,39 @@ def get_top_tracks(access_token: str):
         raise HTTPException(status_code=400, detail="Failed to fetch top tracks")
 
     top_tracks = response.json().get("items", [])
+    track_ids = [track["id"] for track in top_tracks]
+
+    return {"top_tracks": track_ids}
+
+def get_top_tracks_from_spotify(access_token: str):
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = requests.get(f"{SPOTIFY_API_URL}/me/top/tracks?limit=10", headers=headers)
+    
+    if response.status_code != 200:
+        raise HTTPException(status_code=400, detail="Failed to fetch top tracks")
+
+    top_tracks = response.json().get("items", [])
     track_names = [track["name"] for track in top_tracks]
 
-    return {"top_tracks": track_names}
+    return track_names
 
 @router.get("/recommend")
-def get_recommendations(access_token: str, seed_tracks: str):
-    headers = {"Authorization": f"Bearer {access_token}"}
-    url = f"{SPOTIFY_API_URL}/v1/recommendations?limit=10&seed_tracks={seed_tracks}"
-    response = requests.get(url, headers=headers)
+async def recommend_songs(request: Request, access_token: str):
+    try:
+        # Step 1: Get the top tracks from Spotify
+        top_tracks = get_top_tracks_from_spotify(access_token)
+        if not top_tracks:
+            raise HTTPException(status_code=404, detail="No tracks found.")
+        
+        # Step 2: Get recommendations for each track using T5 model
+        recommendations = []
+        for track in top_tracks:
+            recommendations.extend(recommend_songs_using_t5(track))
+        
+        # Step 3: Return recommendations
+        return {"recommended_songs": recommendations}
 
-    if response.status_code != 200:
-        raise HTTPException(status_code=400, detail="Failed to fetch recommendations")
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")  # Log the error for debugging
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
-    top_tracks = response.json()["tracks"]
-
-    model_recommendations = recommend_songs_using_t5(top_tracks)
-
-    return {"recommended_songs": model_recommendations}

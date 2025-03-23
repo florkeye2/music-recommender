@@ -130,7 +130,7 @@ const Dashboard: React.FC = () => {
                     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-4">
                         {/* Pass top tracks to Recommendations component */}
                         {accessToken && topTracks.length > 0 ? (
-                            <Recommendations accessToken={accessToken} topTracks={topTracks} />
+                            <Recommendations accessToken={accessToken} />
                         ) : (
                             <p>Please log in to get recommendations.</p>
                         )}

@@ -1,36 +1,39 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Recommendations: React.FC<{ accessToken: string, topTracks: any[] }> = ({ accessToken, topTracks }) => {
+const Recommendations: React.FC<{ accessToken: string }> = ({ accessToken }) => {
     const [recommendations, setRecommendations] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>("");
 
     const fetchRecommendations = async () => {
         try {
-            const trackIds = topTracks.map(track => track.id).join(",");
             const response = await axios.get(
-                `http://127.0.0.1:3001/recommend?access_token=${accessToken}&seed_tracks=${trackIds}`
+                `http://127.0.0.1:3001/recommend?access_token=${accessToken}`
             );
             console.log("Recommendations Response:", response.data);
             setRecommendations(response.data.recommended_songs);
             setLoading(false);
         } catch (error) {
             console.error("Error fetching recommendations:", error);
+            setError("Failed to fetch recommendations.");
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        if (topTracks.length > 0) {
+        if (accessToken) {
             fetchRecommendations();
         }
-    }, [topTracks]);
+    }, [accessToken]);
 
     return (
         <div className="p-4 bg-gray-900 text-white rounded-lg w-full">
             <h2 className="text-xl font-bold mb-4">Song Recommendations</h2>
             {loading ? (
                 <p>Loading recommendations...</p>
+            ) : error ? (
+                <p className="text-red-500">{error}</p>
             ) : (
                 <ul className="space-y-4">
                     {recommendations.length === 0 ? (
