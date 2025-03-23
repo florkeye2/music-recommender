@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosSearch } from "react-icons/io";
 
 interface SearchProps {
     accessToken: string;
@@ -34,30 +36,36 @@ const Search: React.FC<SearchProps> = ({ accessToken, addToQueue }) => {
     };
 
     return (
-        <div className="space-y-4">
-            <input
-                type="text"
-                placeholder="Search for a song..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="p-2 border border-zinc-700 rounded bg-zinc-800 text-white w-full"
-            />
-            <button
-                onClick={searchSongs}
-                className="p-2 bg-green-500 text-white rounded w-full"
-            >
-                Search
-            </button>
-
+        <div className="flex flex-col space-y-2">
+            <div className="flex w-full items-center space-x-2">
+                <input
+                    type="text"
+                    placeholder="Search for a song..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="p-2 border border-zinc-700 rounded bg-zinc-800 text-white w-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <button
+                    onClick={searchSongs}
+                    aria-label="Search"
+                    className="p-2 border border-green-800 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white rounded"
+                >
+                    <IoIosSearch className="text-2xl" />
+                </button>
+            </div>
             <ul className="space-y-2">
                 {results.map((track) => (
-                    <li key={track.id} className="flex justify-between items-center">
-                        {track.name} by {track.artists[0].name}
+                    <li key={track.id} className="flex justify-between items-center space-x-2">
+                        <div className="space-x-1">
+                            <span className="font-bold">"{track.name}"</span>
+                            <span className="text-zinc-300">by</span>
+                            <span className="font-bold">{track.artists[0].name}</span>
+                        </div>
                         <button
                             onClick={() => addToQueue(track.id)}
-                            className="ml-4 p-1 bg-blue-500 text-white rounded"
+                            className="cursor-pointer"
                         >
-                            Queue
+                            <IoIosAddCircleOutline className="text-3xl text-green-500" />
                         </button>
                     </li>
                 ))}

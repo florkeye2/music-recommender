@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { IoIosAddCircleOutline } from "react-icons/io";
 import axios from "axios";
 
 interface RecommendationsProps {
@@ -40,11 +41,14 @@ const Recommendations: React.FC<RecommendationsProps> = ({ songData, exploration
 
     return (
         <div className="text-white rounded-lg space-y-4">
-            <h2 className="text-xl font-bold">Song Recommendations</h2>
+            <h2 className="text-xl font-bold">Recommendations</h2>
             {loading ? (
                 <p>Loading recommendations...</p>
             ) : error ? (
-                <p className="text-red-500">{error}</p>
+                <>
+                    <p className="text-red-500">{error}</p>
+                    <a className="text-blue-500 cursor-pointer" href="http://localhost:5173/login">Click here to try logging in again.</a>
+                </>
             ) : (
                 <ul className="space-y-4">
                     {recommendations.length === 0 ? (
@@ -59,9 +63,9 @@ const Recommendations: React.FC<RecommendationsProps> = ({ songData, exploration
                                     </div>
                                     <button
                                         onClick={() => addToQueue(rec.id)}
-                                        className="ml-4 p-1 bg-blue-500 text-white rounded"
+                                        className="cursor-pointer"
                                     >
-                                        Queue
+                                        <IoIosAddCircleOutline className="text-3xl text-green-500" />
                                     </button>
                                 </div>
                             </li>

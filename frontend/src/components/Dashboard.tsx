@@ -6,6 +6,7 @@ import Search from "./Search";
 import Queue from "./Queue";
 import Timestamp from "./Timestamp";
 import Recommendations from "./Recommendations"; // Import Recommendations component
+import ExplorationSlider from "./ExplorationSlider";
 
 const VERSION = 'B';
 
@@ -81,7 +82,7 @@ const Dashboard: React.FC = () => {
     }, [accessToken]);
 
     return (
-        <div className="bg-zinc-900 text-white">
+        <div className="flex bg-zinc-900 text-white w-full h-screen justify-center items-center">
             {accessToken ? (
                 <>
                     {playerData ? (
@@ -91,20 +92,10 @@ const Dashboard: React.FC = () => {
                                     <Search accessToken={accessToken} addToQueue={addToQueue} />
                                     <CurrentSong songData={playerData.item} />
                                     <div className="flex flex-col space-y-4">
-                                        <Recommendations songData={playerData.item} explorationValue={explorationValue} accessToken={accessToken} addToQueue={addToQueue}/>
-                                        { VERSION == 'B' ? (
-                                            <div className="flex flex-col text-xl font-bold space-y-2">
-                                                <h1>How much exploration would you like?</h1>
-                                                <input
-                                                    type="range"
-                                                    min="0"
-                                                    max="100"
-                                                    value={explorationValue}
-                                                    onChange={handleExplorationChange}
-                                                    className="cursor-pointer accent-zinc-300 w-full"
-                                                />
-                                            </div>
-                                        ) : null }
+                                        <Recommendations songData={playerData.item} explorationValue={explorationValue} accessToken={accessToken} addToQueue={addToQueue} />
+                                        {VERSION == 'B' ? (
+                                            <ExplorationSlider explorationValue={explorationValue} handleExplorationChange={handleExplorationChange} />
+                                        ) : null}
                                     </div>
                                     <Queue accessToken={accessToken} />
                                 </div>
@@ -119,11 +110,14 @@ const Dashboard: React.FC = () => {
                             </div>
                         </>
                     ) : (
-                        <p>No active Spotify player.</p>
+                        <p>No active Spotify player. Try opening Spotify and playing a song.</p>
                     )}
                 </>
             ) : (
-                <p>Not logged in</p>
+                <div className="flex flex-col justify-center items-center">
+                    <p>Not logged in</p>
+                    <a className="text-blue-500 cursor-pointer" href="http://localhost:5173/login">Click here to try logging in again.</a>
+                </div>
             )}
         </div>
     );
