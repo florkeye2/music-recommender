@@ -1,41 +1,45 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const TopTracks: React.FC<{ accessToken: string }> = ({ accessToken }) => {
-    const [topTracks, setTopTracks] = useState<string[]>([]);
+const Recommendations: React.FC<{ accessToken: string, topTracks: any[] }> = ({ accessToken, topTracks }) => {
+    const [recommendations, setRecommendations] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const fetchTopTracks = async () => {
+    const fetchRecommendations = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:3001/top-tracks?access_token=${accessToken}`);
-            console.log("Top Tracks Response:", response.data);  // Check the structure
-            setTopTracks(response.data.top_tracks);
+            const trackIds = topTracks.map(track => track.id).join(",");
+            const response = await axios.get(
+                `http://127.0.0.1:3001/recommend?access_token=${accessToken}&seed_tracks=${trackIds}`
+            );
+            console.log("Recommendations Response:", response.data);
+            setRecommendations(response.data.recommended_songs);
             setLoading(false);
         } catch (error) {
-            console.error("Error fetching top tracks:", error);
+            console.error("Error fetching recommendations:", error);
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        if (accessToken) {
-            fetchTopTracks();
+        if (topTracks.length > 0) {
+            fetchRecommendations();
         }
-    }, [accessToken]);
+    }, [topTracks]);
 
     return (
         <div className="p-4 bg-gray-900 text-white rounded-lg w-full">
-            <h2 className="text-xl font-bold mb-4">Top Tracks</h2>
+            <h2 className="text-xl font-bold mb-4">Song Recommendations</h2>
             {loading ? (
-                <p>Loading top tracks...</p>
+                <p>Loading recommendations...</p>
             ) : (
                 <ul className="space-y-4">
-                    {topTracks.length === 0 ? (
-                        <p>No top tracks found.</p>
+                    {recommendations.length === 0 ? (
+                        <p>No recommendations found.</p>
                     ) : (
-                        topTracks.map((track, index) => (
+                        recommendations.map((rec, index) => (
                             <li key={index} className="p-2 bg-gray-800 rounded-lg">
-                                <p className="text-lg font-semibold">{track}</p>
+                                <p className="text-lg font-semibold">{rec.name}</p>
+                                <p className="text-sm">{rec.artist}</p>
                             </li>
                         ))
                     )}
@@ -45,4 +49,4 @@ const TopTracks: React.FC<{ accessToken: string }> = ({ accessToken }) => {
     );
 };
 
-export default TopTracks;
+export default Recommendations;

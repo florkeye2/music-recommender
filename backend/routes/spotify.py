@@ -3,6 +3,7 @@ from fastapi.responses import RedirectResponse
 import requests
 import base64
 from backend.config import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, REDIRECT_URI, FRONTEND_URL, TOKEN_URL, SPOTIFY_API_URL
+from backend.recommendation import recommend_songs_using_t5
 
 router = APIRouter()
 
@@ -62,3 +63,18 @@ def get_top_tracks(access_token: str):
     track_names = [track["name"] for track in top_tracks]
 
     return {"top_tracks": track_names}
+
+@router.get("/recommend")
+def get_recommendations(access_token: str, seed_tracks: str):
+    headers = {"Authorization": f"Bearer {access_token}"}
+    url = f"{SPOTIFY_API_URL}/v1/recommendations?limit=10&seed_tracks={seed_tracks}"
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        raise HTTPException(status_code=400, detail="Failed to fetch recommendations")
+
+    top_tracks = response.json()["tracks"]
+
+    model_recommendations = recommend_songs_using_t5(top_tracks)
+
+    return {"recommended_songs": model_recommendations}
