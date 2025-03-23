@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
     }, [accessToken]);
 
     return (
-        <div className="flex bg-zinc-900 text-white w-full h-screen justify-center items-center">
+        <div className="bg-zinc-900 text-white w-full h-screen justify-center items-center">
             {accessToken ? (
                 <>
                     {playerData ? (
