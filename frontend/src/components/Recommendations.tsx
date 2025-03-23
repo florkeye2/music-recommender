@@ -9,10 +9,10 @@ const Recommendations: React.FC<{ accessToken: string }> = ({ accessToken }) => 
     const fetchRecommendations = async () => {
         try {
             const response = await axios.get(
-                `http://127.0.0.1:3001/recommend`
+                `http://127.0.0.1:3001/recommend?access_token=${accessToken}`
             );
             console.log("Recommendations Response:", response.data);
-            setRecommendations(response.data.recommendation_ids);
+            setRecommendations(response.data.recommendations);
             setLoading(false);
         } catch (error) {
             console.error("Error fetching recommendations:", error);
@@ -22,8 +22,8 @@ const Recommendations: React.FC<{ accessToken: string }> = ({ accessToken }) => 
     };
 
     useEffect(() => {
-        fetchRecommendations(); 
-    }, []);
+        fetchRecommendations();
+    }, [accessToken]);
 
     return (
         <div className="p-4 bg-gray-900 text-white rounded-lg w-full">

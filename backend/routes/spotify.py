@@ -77,13 +77,30 @@ def get_top_tracks_from_spotify(access_token: str):
     return track_names
 
 @router.get("/recommend")
-async def recommend_songs(request: Request):
+async def recommend_songs(access_token: str):
     try:
         example_track_id = "01QoK9DA7VTeTSE3MNzp4I"
-        recommendation_ids = recommend_similar_tracks(example_track_id, 5)
-        
-        return {"recomendation_ids": recommendation_ids}
+        recommendation_ids = recommend_similar_tracks(example_track_id, 5).tolist()
+
+        if not recommendation_ids:
+            raise HTTPException(status_code=404, detail="No recommendations found.")
+
+        track_details = []
+        headers = {"Authorization": f"Bearer {access_token}"}
+
+        for track_id in recommendation_ids:
+            track_response = requests.get(f"{SPOTIFY_API_URL}/tracks/{track_id}", headers=headers)
+            if track_response.status_code != 200:
+                raise HTTPException(status_code=track_response.status_code, detail="Failed to fetch track details")
+
+            track_data = track_response.json()
+            track_name = track_data["name"]
+            artist_name = track_data["artists"][0]["name"]
+
+            track_details.append({"name": track_name, "artist": artist_name, "id": track_id})
+
+        return {"recommendations": track_details}
 
     except Exception as e:
-        print(f"Error occurred: {str(e)}")  # Log the error for debugging
+        print(f"Error occurred: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
