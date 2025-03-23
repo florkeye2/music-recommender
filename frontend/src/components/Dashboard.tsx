@@ -5,6 +5,7 @@ import ControlBar from "./ControlBar";
 import Search from "./Search";
 import Queue from "./Queue";
 import Timestamp from "./Timestamp";
+import Recommendations from "./Recommendations";
 
 const Dashboard: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -103,6 +104,9 @@ const Dashboard: React.FC = () => {
                         ) : (
                             <p>No active Spotify player.</p>
                         )}
+                    </div>
+                    <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-4">
+                        {accessToken ? <Recommendations accessToken={accessToken} /> : <p>Please log in to get recommendations.</p>}
                     </div>
                     <div className="flex-1 ml-8">
                         <Queue queuedSongs={queuedSongs} />

@@ -10,3 +10,4 @@ SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 TOKEN_URL = "https://accounts.spotify.com/api/token"
 FRONTEND_URL = "http://localhost:5173"
+SPOTIFY_API_URL = "https://api.spotify.com/v1"
