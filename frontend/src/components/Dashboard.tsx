@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import Header from "./Header";
 import CurrentSong from "./CurrentSong";
 import ControlBar from "./ControlBar";
 import Search from "./Search";
@@ -83,11 +84,12 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="bg-zinc-900 text-white w-full h-screen justify-center items-center">
+            <Header />
             {accessToken ? (
                 <>
                     {playerData ? (
                         <>
-                            <div className="flex flex-col items-center w-full h-[88vh] p-4">
+                            <div className="flex flex-col items-center w-full h-[88vh] p-4 pb-16">
                                 <div className="flex justify-evenly w-full space-x-4">
                                     <Search accessToken={accessToken} addToQueue={addToQueue} />
                                     <CurrentSong songData={playerData.item} />
