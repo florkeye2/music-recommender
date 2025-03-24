@@ -17,8 +17,10 @@ const ExplorationSlider: React.FC<ExplorationSliderProps> = ({ explorationValue,
                 onChange={handleExplorationChange}
                 className="cursor-pointer accent-zinc-300 w-full"
             />
+            <span className="text-lg text-zinc-300">{explorationValue}</span> {/* Display exploration value */}
         </div>
     );
 };
+
 
 export default ExplorationSlider;
