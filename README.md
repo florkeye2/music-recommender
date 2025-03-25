@@ -12,3 +12,7 @@ Dataset: http://millionsongdataset.com/lastfm/
 4. Run npm install
 5. Run .\run-backend.bat
 6. Run .\run-frontend.bat
+
+# Code Organization
+Our project has a separate backend and frontend. Our backend uses Fast API and our frontend uses React and Typescript. The backend handles routes (defining endpoints for Spotify and authentication operations), the config, and the implementation of our model. The frontend uses typescript and tailwind to dynamically update what the user sees and processes the actions the user takes on the page. The frontend is where we immplement various features like search, queue, etc.
+If you're having trouble using the Spotify API ask us for help and we will add you to our Spotify developers app.
