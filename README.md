@@ -5,4 +5,10 @@ Interactive Music Genre Exploration with Visualization and Mood Control: https:/
 
 Dataset: http://millionsongdataset.com/lastfm/
 
-Existing Projects: https://github.com/topics/music-recommendation-system
+# How to run on Windows
+1. Run .\install-venv.bat
+2. Run .\venv\Scripts\activate
+3. Run pip install -r requirements.txt
+4. Run npm install
+5. Run .\run-backend.bat
+6. Run .\run-frontend.bat
